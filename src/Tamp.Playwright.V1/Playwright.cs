@@ -54,4 +54,32 @@ public static class Playwright
         configure?.Invoke(s);
         return s.ToCommandPlan(tool);
     }
+
+    // ---- Object-init overloads (TAM-161) ----
+    // Two equivalent authoring styles; both produce identical CommandPlans. Fluent
+    // stays canonical in docs and `tamp init` templates; object-init available for
+    // consumers who prefer the C# initializer shape.
+    //
+    //     Playwright.Test(tool, new() { Config = "playwright.config.ts", Headed = true });
+    //
+    // is equivalent to:
+    //
+    //     Playwright.Test(tool, s => s.SetConfig("playwright.config.ts").SetHeaded());
+
+    public static CommandPlan Test(Tool tool, PlaywrightTestSettings settings) => Build(tool, settings);
+    public static CommandPlan Install(Tool tool, PlaywrightInstallSettings settings) => Build(tool, settings);
+    public static CommandPlan InstallDeps(Tool tool, PlaywrightInstallDepsSettings settings) => Build(tool, settings);
+    public static CommandPlan Uninstall(Tool tool, PlaywrightUninstallSettings settings) => Build(tool, settings);
+    public static CommandPlan Codegen(Tool tool, PlaywrightCodegenSettings settings) => Build(tool, settings);
+    public static CommandPlan ShowReport(Tool tool, PlaywrightShowReportSettings settings) => Build(tool, settings);
+    public static CommandPlan MergeReports(Tool tool, PlaywrightMergeReportsSettings settings) => Build(tool, settings);
+    public static CommandPlan ClearCache(Tool tool, PlaywrightClearCacheSettings settings) => Build(tool, settings);
+    public static CommandPlan Open(Tool tool, PlaywrightOpenSettings settings) => Build(tool, settings);
+
+    private static CommandPlan Build<T>(Tool tool, T settings) where T : PlaywrightSettingsBase
+    {
+        if (tool is null) throw new ArgumentNullException(nameof(tool));
+        if (settings is null) throw new ArgumentNullException(nameof(settings));
+        return settings.ToCommandPlan(tool);
+    }
 }
