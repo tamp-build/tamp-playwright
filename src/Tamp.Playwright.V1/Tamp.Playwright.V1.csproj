@@ -10,7 +10,12 @@
     <PackageId>Tamp.Playwright.V1</PackageId>
     <Description>Tamp wrapper for Playwright 1.x — test/install/install-deps/uninstall/codegen/show-report/merge-reports/clear-cache. Designed for CI shapes (sharding, JUnit reporters, --pass-with-no-tests, --shard m/n).</Description>
     <IsPackable>true</IsPackable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="$(TampCorePath)" Condition="'$(TampCoreMode)' == 'project'" />
